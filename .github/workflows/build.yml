@@ -101,4 +101,4 @@ jobs:
 
     - uses: codecov/codecov-action@v3
       with:
-        files: ${{ github.workspace }}/build-cov/coverage/index.html
+        files: ${{ github.workspace }}/build-cov/coverage/coverage.info.cleaned
