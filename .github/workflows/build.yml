@@ -73,8 +73,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Install lcov
-      run: apt-get update && apt-get -y install lcov
+    - name: Install gcovr
+      run: pip install gcovr
     
     - name: Configure Conan
       run: |
