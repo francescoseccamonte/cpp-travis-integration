@@ -93,12 +93,11 @@ jobs:
            cmake -S .. -B . -DCMAKE_BUILD_TYPE=Debug -DCODE_COVERAGE=ON
            cmake --build .
 
-    - name: Run tests
+    - name: Run tests and generate coverage report
       run: |
            cd /content/build-cov
-           ctest --parallel
            cmake --build . --target coverage
 
     - uses: codecov/codecov-action@v3
       with:
-        files: ${{ github.workspace }}/build-cov/coverage/coverage.info.cleaned
+        files: ${{ github.workspace }}/build-cov/coverage.xml

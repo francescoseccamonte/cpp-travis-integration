@@ -29,18 +29,20 @@ else()
         You need to run \"conan install ${CMAKE_SOURCE_DIR}\".")
 endif()
 
-# Code coverage
-if (CODE_COVERAGE)
-    include(code-coverage)
-    append_coverage_compiler_flags()
-    setup_target_for_coverage(
-        NAME coverage
-        EXECUTABLE ctest
-    )
-endif()
-
 # Include common macros
 include(common_macros)
+
+# Code coverage
+if (CODE_COVERAGE)
+    include(CodeCoverage)
+    append_coverage_compiler_flags()
+
+    setup_target_for_coverage_gcovr_xml(
+        NAME coverage                    # New target name
+        EXECUTABLE ctest --parallel      # Executable in PROJECT_BINARY_DIR
+        BASE_DIRECTORY "./"              # Directory where to save the coverage report
+    )
+endif()
 
 # Put all binaries and libraries in the same place
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
