@@ -5,6 +5,9 @@ project(cpp-travis-integration LANGUAGES CXX)
 # Project wide C++ standard
 set(CMAKE_CXX_STANDARD 17)
 
+# Let CMake easily find our custom CMake modules
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+
 # Dynamic libraries preferred by default
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 
@@ -14,6 +17,8 @@ if (BUILD_TESTING)
     enable_testing()
 endif()
 
+option(BUILD_EXAMPLES "Build Examples" OFF)
+
 # Setup conan targets -> requires to have run conan install
 if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
     include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
@@ -22,6 +27,21 @@ else()
     message(FATAL_ERROR "
         Missing conanbuildinfo.cmake file in your build folder \"${CMAKE_BINARY_DIR}\".
         You need to run \"conan install ${CMAKE_SOURCE_DIR}\".")
+endif()
+
+# Include common macros
+include(common_macros)
+
+# Code coverage
+if (CODE_COVERAGE)
+    include(CodeCoverage)
+    append_coverage_compiler_flags()
+
+    setup_target_for_coverage_gcovr_xml(
+        NAME coverage                    # New target name
+        EXECUTABLE ctest --parallel      # Executable in PROJECT_BINARY_DIR
+        BASE_DIRECTORY "./"              # Directory where to save the coverage report
+    )
 endif()
 
 # Put all binaries and libraries in the same place
@@ -58,5 +78,11 @@ add_compile_options(
     -Wdouble-promotion      # float is implicit promoted to double
     -Wformat=2              # Security issues around functions that format output (like printf)
 )
+
+option(ENABLE_DOXYGEN "Use Doxygen to generate documentation by providing 'make doc'." OFF)
+if(ENABLE_DOXYGEN)
+    include(doxygen)
+    enable_doxygen()
+endif()
 
 add_subdirectory(src)

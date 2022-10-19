@@ -8,26 +8,29 @@ class CppTravisIntegrationConan(ConanFile):
     description = "C++ Travis integration"
     license = "Apache 2.0"
     settings = "os", "compiler", "build_type", "arch"
-    exports_sources = "CMakeLists.txt", "src/*"
+    exports_sources = "CMakeLists.txt", "cmake/*", "src/*"
     no_copy_source = True
     generators = "cmake", "virtualenv"
     options = {
         "shared": [True, False],
-        "build_tests": [True, False]
+        "build_tests": [True, False],
+        "build_examples": [True, False],
         }
     default_options = {
         "shared": True,
-        "build_tests": False
+        "build_tests": False,
+        "build_examples": False,
         }
 
     def build_requirements(self):
         if self.options.build_tests:
-            self.build_requires("gtest/1.12.1@bincrafters/stable")
+            self.build_requires("gtest/cci.20210126")
 
     def build(self):
         cmake = CMake(self)
         cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
         cmake.definitions["BUILD_TESTING"] = self.options.build_tests
+        cmake.definitions["BUILD_EXAMPLES"] = self.options.build_examples
         cmake.configure()
         cmake.build()
 
