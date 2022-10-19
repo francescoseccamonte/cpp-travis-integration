@@ -239,10 +239,9 @@ function(setup_target_for_coverage_lcov)
         set(BASEDIR ${PROJECT_SOURCE_DIR})
     endif()
 
-    set(COVERAGE_EXCLUDES ${COVERAGE_EXCLUDES} "\\*/.conan/data/\\*" "\\*/test/\\*" "/usr/include/\\*")
-
     # Collect excludes (CMake 3.4+: Also compute absolute paths)
     set(LCOV_EXCLUDES "")
+    set(COVERAGE_EXCLUDES ${COVERAGE_EXCLUDES} "\\*/.conan/data/\\*" "\\*/test/\\*" "/usr/include/\\*")
     foreach(EXCLUDE ${Coverage_EXCLUDE} ${COVERAGE_EXCLUDES} ${COVERAGE_LCOV_EXCLUDES})
         if(CMAKE_VERSION VERSION_GREATER 3.4)
             get_filename_component(EXCLUDE ${EXCLUDE} ABSOLUTE BASE_DIR ${BASEDIR})

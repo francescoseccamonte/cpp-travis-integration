@@ -79,4 +79,10 @@ add_compile_options(
     -Wformat=2              # Security issues around functions that format output (like printf)
 )
 
+option(ENABLE_DOXYGEN "Use Doxygen to generate documentation by providing 'make doc'." OFF)
+if(ENABLE_DOXYGEN)
+    include(doxygen)
+    enable_doxygen()
+endif()
+
 add_subdirectory(src)
