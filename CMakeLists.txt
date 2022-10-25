@@ -49,6 +49,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
+# Make libraries to be found on MacOS
+set(CMAKE_MACOSX_RPATH ${CMAKE_BINARY_DIR}/lib)
+
 # Convenience default settings for install destinations. Use it to
 # install targets to the right place. For instance:
 #
@@ -78,6 +81,10 @@ add_compile_options(
     -Wdouble-promotion      # float is implicit promoted to double
     -Wformat=2              # Security issues around functions that format output (like printf)
 )
+
+if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+endif()
 
 option(ENABLE_DOXYGEN "Use Doxygen to generate documentation by providing 'make doc'." OFF)
 if(ENABLE_DOXYGEN)
