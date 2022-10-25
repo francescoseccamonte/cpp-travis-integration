@@ -82,7 +82,7 @@ add_compile_options(
     -Wformat=2              # Security issues around functions that format output (like printf)
 )
 
-if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "AppleClang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 endif()
 
